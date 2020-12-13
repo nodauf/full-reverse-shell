@@ -27,7 +27,7 @@ if [[ -z "$PORT" ]]; then
     usage
 fi
 
-python shellerator/shellerator.py -p $PORT
+shellerator -lp $PORT
 
 #If error in shellerator do not continue
 if [[ $? != 0 ]]
