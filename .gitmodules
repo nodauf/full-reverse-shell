@@ -1,0 +1,3 @@
+[submodule "shellerator"]
+	path = shellerator
+	url = https://github.com/ShutdownRepo/shellerator.git
